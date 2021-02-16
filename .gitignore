@@ -1,0 +1,19 @@
+# emacs bullshit
+*~
+
+# virtual environment
+venv/
+
+# other python
+__pycache__/
+
+# other miscellaneous
+
+
+# local configuration
+.env.json
+.env.test.json
+
+# local storage
+.db.json
+.db.test.json
