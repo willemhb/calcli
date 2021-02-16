@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "galvanic-veld-304301",
+  "private_key_id": "2d48874455bf27a5eaea3cd94aea13263ed9ce31",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCt2zZg0jXZZRvZ\ne11D5xeeP4bl0ucMl3dZ3+4peJLpZYVh4tgjqi2TxpDE03BBBNYk3Bn3qz3L0Lij\nMueL6pmKLiJB1DsQN991pvZ3a72Z5WtjPQAb7u23wIuzXPT2EI2FkosShnNrUsKN\nuS2NX/GJUHBcd9RzqPHbaHQs/fUPcV5Iu0OssXPIFNnxv4fCDNoxZ7a9O2195AXk\nHrgGtQXIJks3DTvXHsVMJQ9uDCNdU4zehF4+I1Md7pn179OXGXnRMU7LOI2ZKMqA\nAjpr7w0bFdvtY1Yt/oYszuMFMAborsONcGLneB8v6szp6YHqjx6KyViw7RZqEAbR\ncN0iv2kxAgMBAAECggEALfzP4AGKw/QGT1td+sGskiv8q1tDyaVhKTFeJrMhrUIw\n64kdIiX4Q2AhWCcTyOcWHA7qgYRW5sxRor2q2OxX6+CzKBWTAAG/hrgA9urVbtls\nNAZlOn5TfCke6vV6SIJtZPkz91UAP9HW67UhcwV/dxKDfjomROfZ/e8d1+7fPVOQ\nYitJSXalnwZSm23SUvfhVj+2vL4A4p3EYiAz8LmotFJbQsI9VTXSSP76nQ7f4EYO\nVKPVkGq8SSwyunMZP+FCiQKrVsd8VifOysjPRsNKr1fRk/hzdyBUaZn7xzpzDJoa\nYX+m4SfSM2e2tY47W/7VdCTp9UbM8Z+T62dvyqr2zwKBgQDc6cEMDerRYb/l8RpK\ngV24Ckzus7HoWWQWaXGsf2/W+OuK7DqzttW8UymPp1nUfSpP0ovH1H1zgC6vJ22j\nBylOQAM0gzvDTJkB3YxfD+6bttJtyEZazDE5+T8ZJIXiJrVhmgBZWALW2Wt0cjF/\nwzCOac7eC4NLOh8+lZj6YfWBZwKBgQDJeCVae3m3mmjskDy4KEcqoJhbJo0x/jhu\nihO6pB/OwVytkMaGRgdIiLtL2n4MHC8i8UiwseZ8Nf6ISpCEvJZToIU3umZ+U4AM\nwzhmyNni1Sy9x/1Z5kh+dpXBol9XugFA/vpV8K0ew6yKGq9klRpcT3Xymy7ak3Uo\nB7HEq52ppwKBgFuVxWTb+DfqEIah2EZ/L313N8HWWbF8LdRkzq22/4TeGbi0ivmq\nmR3EVHyr4sAHTB1fqnekDoZt4+zVqcxm0acRPsLsjUBAZ0awtNtMXZ3Mw5yj5RcL\nhHUGcjRYQfEqHxRhpjdkF3k/Fh9moELZhy3ji9HecAYmCIIHvy4+omuNAoGAPUIZ\n4Xw/0zLRCnUE8V3V3cE88iIztmq9D+dN/mcfAMfMfT3TD0rFtilVAchqoRYEwxQo\nbQl6snPcc+ZwMNwCvWTGfN5hgbGz8q19Pct+bLkyxHXFtAsQKdu2x0yuvsbg0Ll2\ntqDakssecFOS1vt7K2xBycWjpnRFoClOxSUFaGsCgYBczPew6Gt3LMYu8gahgqBE\nttDoTKyZrvX/kD5HTFPiciIQicv5rdoLTpDwBlOVF2rz/TGtGBcCvS8vH6yoAyBL\n1zA9zX1DM/ZstltqwRAPIAh3y9pAwPyRhCwR8IAm0jraQqIYpj9xJCjoU4yjZaHf\nPCU8jFG5T8vvuSsRhc8+Og==\n-----END PRIVATE KEY-----\n",
+  "client_email": "dsa-chapelboro-service-gmail-c@galvanic-veld-304301.iam.gserviceaccount.com",
+  "client_id": "103347545553774697272",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dsa-chapelboro-service-gmail-c%40galvanic-veld-304301.iam.gserviceaccount.com"
+}
