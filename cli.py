@@ -1,4 +1,4 @@
-import sys, os, re, requests, jwt, json, datetime as t, random as rand, argparse as ap, pprint as pp
+import sys, os, re, time, requests, jwt, json, datetime as dt, random as rand, argparse as ap, pprint as pp
 from dateutil.parser import parse as du_parse
 from typing import Union, Callable, Optional, Iterable, AnyStr
 from functools import lru_cache, singledispatch, wraps, cached_property
@@ -17,7 +17,7 @@ def get_ts() -> int:
     return int(time.time())
 
 
-def get_dt(o=None) -> dt.datetime:
+def get_dt(o=None,/) -> dt.datetime:
     if o is None:
         return dt.datetime.now()
 
@@ -25,7 +25,7 @@ def get_dt(o=None) -> dt.datetime:
         return o
 
     else:
-        return get_cached_dt(o)
+        return get_cached_dt(o,fmt)
 
 
 def wrt_dt(d, fmt: Optional[str] = None) -> str:
@@ -94,11 +94,18 @@ def load_conf(fnm: str) -> dict:
     return conf_d
 
 
+def save_conf(conf: dict, fnm: str):
+    with open(fnm, "w") as conf_file:
+        json.dump(conf, conf_file, default=wrt_dt)
+
+    return
+
+
 def an_api_call(fun):
     @wraps(fun)
     def wrapper(conf: dict, *args, **kwargs):
-        local_conf = {"headers": {"OSDI-API-Token": conf["an-token"]}} | conf
-        return fun(conf, *args, **kwargs)
+        local_conf = {"headers": {"OSDI-API-Token": conf["an-key"]}} | conf
+        return fun(local_conf, *args, **kwargs)
 
     return wrapper
 
@@ -111,8 +118,9 @@ def google_api_call(fun):
         to the config dictionary, but it also ensures the google authorization token is up
         to date.
         """
+        # breakpoint()
         if get_dt() > conf["google-token-expires"]:
-            with open(self["google-pem-file"]) as pf:
+            with open(conf["google-pem-file"]) as pf:
                 contents = json.load(pf)
                 pem = contents["private_key"].encode('utf8')
 
@@ -140,10 +148,10 @@ def google_api_call(fun):
             conf["google-access-token"] = rslt["access_token"]
             conf["google-token-expires"] = get_dt() + dt.timedelta(seconds=rslt["expires_in"])
 
-        local_conf = conf | {"headers": {"Authorization": f"Bearer {self.google_token}"},
+        local_conf = conf | {"headers": {"Authorization": f"Bearer {conf['google-access-token']}"},
                              "params": {"scope": conf["google-auth-scope"]}}
 
-        return fun(conf, *args, **kwargs)
+        return fun(local_conf, *args, **kwargs)
 
     return wrapper
 
@@ -154,7 +162,7 @@ def get_an_events(conf: dict, **query) -> list[dict]:
     Query the action network API.
     """
     endpt = mk_route(conf["an-base"], "events", "")
-    rslt = get(endpt, params=query, headers=conf["headers"])
+    rslt = requests.get(endpt, params=query, headers=conf["headers"])
 
     rslt.raise_for_status()
 
@@ -187,9 +195,11 @@ def prepare_an_event(event: dict) -> dict:
 @google_api_call
 def add_google_event(conf: dict, event: dict) -> dict:
     endpt = mk_route(conf["google-base"], "calendars", conf["google-cal-id"], "events")
-    headers = conf["google-headers"]
-    params = conf["google-params"] | { "sendUpdates": "none" }
+    headers = conf["headers"]
+    params = conf["params"] | { "sendUpdates": "none" }
     event = {k:v for k,v in event.items() if k != "id"}
+    event["start"]["dateTime"] = wrt_dt(event["start"]["dateTime"], fmt="%Y-%m-%dT%H:%M:%S")
+    event["end"]["dateTime"] = wrt_dt(event["end"]["dateTime"], fmt="%Y-%m-%dT%H:%M:%S")
     rslt = requests.post(endpt, headers=headers, params=params, json=event)
 
     rslt.raise_for_status()
@@ -201,7 +211,7 @@ The command line interface.
 """
 
 mode_choices = ("manual", "auto")
-filter_type = lambda s: s if re.match(r"(?:lt|gt|eq) \d{4}-\d{2}-\d{2}", s) else "gt 1970-01-01"
+filter_type = lambda s: s if re.match(r"(?:lt|gt|eq) created_date \d{4}-\d{2}-\d{2}", s) else "created_date gt '1970-01-01'"
 
 # valid script names
 parser = ap.ArgumentParser(description="CLI for coordinating Google Calendar and Action Network.")
@@ -220,16 +230,16 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.test:
-        conf = Config(".env.test.json")
+        conf = load_conf(".env.test.json")
 
     else:
-        conf = Config(".env.json")
+        conf = load_conf(".env.json")
 
     try:
         an_events = get_an_events(conf, filter=args.filter)
 
     except requests.HTTPError as e:
-        print(f"Request failed with status code {e.response.status} : {e.response.reason}.")
+        print(f"Request failed with status code {e.response.status_code} : {e.response.reason}.")
 
         if args.verbose:
             print(f"\n\nRequest object: --------------------------------\n\n")
@@ -252,22 +262,22 @@ if __name__ == "__main__":
         if args.verbose:
             pp.pprint(prepped_an_events)
 
-        counter = 0
+        count = 0
 
-        for evt in events:
+        for evt in prepped_an_events:
             if args.mode == "manual":
                 print("About to add new event: ---------------------------------\n\n")
                 pp.pprint(evt)
 
-                if input("\n\n Add this event [y/N] ?").lower() in {"", "n", "no"}:
+                if input("\n\n Add this event [y/N] ? ").lower() in {"", "n", "no"}:
                     continue
 
             try:
-                add_google_event(evt)
+                add_google_event(conf, evt)
 
 
             except requests.HTTPError as e:
-                print(f"Request failed with status code {e.response.status} : {e.response.reason}.")
+                print(f"Request failed with status code {e.response.status_code} : {e.response.reason}.")
 
                 if args.verbose:
                     print(f"\n\nRequest object: --------------------------------\n\n")

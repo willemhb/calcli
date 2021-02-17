@@ -10,9 +10,10 @@ __pycache__/
 # other miscellaneous
 
 
-# local configuration
+# local configuration and secrets
 .env.json
 .env.test.json
+galvanic-veld-*.json
 
 # local storage
 .db.json
